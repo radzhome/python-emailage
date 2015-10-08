@@ -1,0 +1,10 @@
+## Mac OS X
+.DS_Store
+
+## python files
+*.pyc
+*.pyo
+
+## intelli
+.idea
+
