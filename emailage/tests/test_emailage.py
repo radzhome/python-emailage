@@ -13,8 +13,11 @@ class TestEmailageAPI(unittest.TestCase):
 
     def setUp(self):
         logging.debug('setting up...')
-        self.account_sid, self.auth_token = raw_input("Enter your Customer SSID: "), \
-                                            raw_input("Enter your Auth Token: "),
+
+        # Replace credentials here.
+        self.account_sid = raw_input("Enter your Customer SSID: ")
+        self.auth_token = raw_input("Enter your Auth Token: ")
+
         self.query = "wang@emailage.com+142.136.211.118"  # The email or IP you want verify
         self.result_format = "json"  # XML or JSON
         self.base_url = "https://sandbox.emailage.com/EmailAgeValidator/"
