@@ -8,3 +8,6 @@
 ## intelli
 .idea
 
+# pypi
+emailage.egg-info
+dist
