@@ -1,3 +1,4 @@
+"""Emailage api tools module."""
 import uuid
 
 def generate_nonce_timestamp():
