@@ -1,6 +1,7 @@
 """Emailage api tools module."""
 import uuid
 
+
 def generate_nonce_timestamp():
     """Generate pseudo-random number and seconds since epoch (UTC)."""
     nonce = uuid.uuid1()
