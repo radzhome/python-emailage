@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>emailage.api</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="emailage-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="emailage-module.html">Package&nbsp;emailage</a> ::
+        Module&nbsp;api
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="emailage.api-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="emailage.api-module.html">Module emailage.api</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""emailAge core API module.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring">This module contains all methods that are required to make a request</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-docstring">fromt the emailAge API.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">base64</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">hmac</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">hashlib</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">urllib</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">logging</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">ast</tt> <tt class="py-keyword">import</tt> <tt class="py-name">literal_eval</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">requests</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Module emailage.tools=emailage.tools-module.html"><a title="emailage.tools" class="py-name" href="#" onclick="return doclink('link-0', 'tools', 'link-0');">tools</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Function emailage.tools.generate_nonce_timestamp()=emailage.tools-module.html#generate_nonce_timestamp"><a title="emailage.tools.generate_nonce_timestamp" class="py-name" href="#" onclick="return doclink('link-1', 'generate_nonce_timestamp', 'link-1');">generate_nonce_timestamp</a></tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name"><a title="emailage.tools" class="py-name" href="#" onclick="return doclink('link-2', 'tools', 'link-0');">tools</a></tt> <tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Function emailage.tools.split_url_and_query()=emailage.tools-module.html#split_url_and_query"><a title="emailage.tools.split_url_and_query" class="py-name" href="#" onclick="return doclink('link-3', 'split_url_and_query', 'link-3');">split_url_and_query</a></tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable emailage.api.logger=emailage.api-module.html#logger"><a title="emailage.api.logger" class="py-name" href="#" onclick="return doclink('link-4', 'logger', 'link-4');">logger</a></tt> <tt class="py-op">=</tt> <tt class="py-name">logging</tt><tt class="py-op">.</tt><tt class="py-name">getLogger</tt><tt class="py-op">(</tt><tt class="py-string">'emailage'</tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
+<a name="get_emailage_url"></a><div id="get_emailage_url-def"><a name="L21"></a><tt class="py-lineno">21</tt> <a class="py-toggle" href="#" id="get_emailage_url-toggle" onclick="return toggle('get_emailage_url');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="emailage.api-module.html#get_emailage_url">get_emailage_url</a><tt class="py-op">(</tt><tt class="py-param">method</tt><tt class="py-op">,</tt> <tt class="py-param">url</tt><tt class="py-op">,</tt> <tt class="py-param">consumer_key</tt><tt class="py-op">,</tt> <tt class="py-param">consumer_secret</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_emailage_url-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="get_emailage_url-expanded"><a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-docstring">"""Generate the oauth url for emailAge</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring">    @param method: can be POST or GET.</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-docstring">    @param url: base url to use, either prod or sandbox..</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-docstring">    @param consumer_key: consumer key credential for authentication.</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt class="py-docstring">    @param consumer_secret: consumer secret credential for authentication.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">method</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">        <tt class="py-name">method</tt> <tt class="py-op">=</tt> <tt class="py-string">"GET"</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">    <tt class="py-name">nonce</tt><tt class="py-op">,</tt> <tt class="py-name">timestamp</tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="emailage.tools.generate_nonce_timestamp" class="py-name" href="#" onclick="return doclink('link-5', 'generate_nonce_timestamp', 'link-1');">generate_nonce_timestamp</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">    <tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-name">orig_query</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="emailage.tools.split_url_and_query" class="py-name" href="#" onclick="return doclink('link-6', 'split_url_and_query', 'link-3');">split_url_and_query</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">    <tt class="py-comment"># URL parse the query, with equal and and chars as safe</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">    <tt class="py-name">query_params</tt> <tt class="py-op">=</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">quote</tt><tt class="py-op">(</tt><tt class="py-name">orig_query</tt><tt class="py-op">,</tt> <tt class="py-name">safe</tt><tt class="py-op">=</tt><tt class="py-string">'=&amp;'</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">'&amp;'</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">    <tt class="py-comment"># URL encode credential params</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">    <tt class="py-name">cred_params</tt> <tt class="py-op">=</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">urlencode</tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">'oauth_consumer_key'</tt><tt class="py-op">:</tt> <tt class="py-name">consumer_key</tt><tt class="py-op">,</tt> <tt class="py-string">'oauth_nonce'</tt><tt class="py-op">:</tt> <tt class="py-name">nonce</tt><tt class="py-op">,</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                                    <tt class="py-string">'oauth_signature_method'</tt><tt class="py-op">:</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">,</tt> <tt class="py-string">'oauth_timestamp'</tt><tt class="py-op">:</tt> <tt class="py-name">timestamp</tt><tt class="py-op">,</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                                    <tt class="py-string">'oauth_version'</tt><tt class="py-op">:</tt> <tt class="py-string">'1.0'</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">    <tt class="py-string">"""ivar: credential parameters required in the payload."""</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">    <tt class="py-name">query_str</tt> <tt class="py-op">=</tt> <tt class="py-name">query_params</tt> <tt class="py-op">+</tt> <tt class="py-name">cred_params</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt class="py-name">sig_url</tt> <tt class="py-op">=</tt> <tt class="py-name">method</tt><tt class="py-op">.</tt><tt class="py-name">upper</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"&amp;"</tt> <tt class="py-op">+</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">quote</tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"&amp;"</tt> <tt class="py-op">+</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">quote</tt><tt class="py-op">(</tt><tt class="py-name">query_str</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">    <tt class="py-comment"># Generate the has using customer secret key and create the digest</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">    <tt class="py-name">hash_result</tt> <tt class="py-op">=</tt> <tt class="py-name">hmac</tt><tt class="py-op">.</tt><tt class="py-name">new</tt><tt class="py-op">(</tt><tt class="py-name">consumer_secret</tt> <tt class="py-op">+</tt> <tt class="py-string">"&amp;"</tt><tt class="py-op">,</tt> <tt class="py-name">sig_url</tt><tt class="py-op">.</tt><tt class="py-name">encode</tt><tt class="py-op">(</tt><tt class="py-string">'utf-8'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">hashlib</tt><tt class="py-op">.</tt><tt class="py-name">sha1</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">digest</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">    <tt class="py-name">sig</tt> <tt class="py-op">=</tt> <tt class="py-name">base64</tt><tt class="py-op">.</tt><tt class="py-name">encodestring</tt><tt class="py-op">(</tt><tt class="py-name">hash_result</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">rstrip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt>  <tt class="py-comment"># Encode string, dropping the leading</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt class="py-string">"""ivar: signature based on consumer secret to validate request."""</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt class="py-name">oauth_url</tt> <tt class="py-op">=</tt> <tt class="py-name">url</tt> <tt class="py-op">+</tt> <tt class="py-string">"?"</tt> <tt class="py-op">+</tt> <tt class="py-name">query_str</tt> <tt class="py-op">+</tt> <tt class="py-string">"&amp;oauth_signature="</tt> <tt class="py-op">+</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">quote</tt><tt class="py-op">(</tt><tt class="py-name">sig</tt><tt class="py-op">.</tt><tt class="py-name">decode</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">oauth_url</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line"> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"> </tt>
+<a name="get_base_url"></a><div id="get_base_url-def"><a name="L57"></a><tt class="py-lineno">57</tt> <a class="py-toggle" href="#" id="get_base_url-toggle" onclick="return toggle('get_base_url');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="emailage.api-module.html#get_base_url">get_base_url</a><tt class="py-op">(</tt><tt class="py-param">use_prod</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_base_url-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="get_base_url-expanded"><a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">    <tt class="py-docstring">"""Returns the base url, either sandbox or prod.</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"><tt class="py-docstring">    @param use_prod: use production url or sandbox.</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">use_prod</tt><tt class="py-op">:</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">        <tt class="py-name">service_url</tt> <tt class="py-op">=</tt> <tt class="py-string">"https://api.emailage.com/EmailAgeValidator/"</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">        <tt class="py-name">service_url</tt> <tt class="py-op">=</tt> <tt class="py-string">"https://sandbox.emailage.com/EmailAgeValidator/"</tt>  <tt class="py-comment"># Sandbox</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">service_url</tt> </tt>
+</div><a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line"> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"> </tt>
+<a name="get_emailage_score"></a><div id="get_emailage_score-def"><a name="L68"></a><tt class="py-lineno">68</tt> <a class="py-toggle" href="#" id="get_emailage_score-toggle" onclick="return toggle('get_emailage_score');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="emailage.api-module.html#get_emailage_score">get_emailage_score</a><tt class="py-op">(</tt><tt class="py-param">email</tt><tt class="py-op">,</tt> <tt class="py-param">customer_key</tt><tt class="py-op">,</tt> <tt class="py-param">secret_token</tt><tt class="py-op">,</tt> <tt class="py-param">ip</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">use_prod</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">score_only</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_emailage_score-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="get_emailage_score-expanded"><a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">    <tt class="py-docstring">"""Returns the emailAge score and message.</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"><tt class="py-docstring">    @param email: email address to query for, mandatory field.</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"><tt class="py-docstring">    @param customer_key: customer key as per emailAge api.</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line"><tt class="py-docstring">    @param secret_token: secret key as per emailAge api.</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line"><tt class="py-docstring">    @param ip: optional ip address to include in the query.</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line"><tt class="py-docstring">    @param use_prod: use emailage production url instead of sandbox.</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line"><tt class="py-docstring">    @return: success, emailAge score data, message</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line"> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">    <tt class="py-name">base_url</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name" targets="Function emailage.api.get_base_url()=emailage.api-module.html#get_base_url"><a title="emailage.api.get_base_url" class="py-name" href="#" onclick="return doclink('link-7', 'get_base_url', 'link-7');">get_base_url</a></tt><tt class="py-op">(</tt><tt class="py-name">use_prod</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"?format=json"</tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">    <tt class="py-name">url</tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name" targets="Function emailage.api.get_emailage_url()=emailage.api-module.html#get_emailage_url"><a title="emailage.api.get_emailage_url" class="py-name" href="#" onclick="return doclink('link-8', 'get_emailage_url', 'link-8');">get_emailage_url</a></tt><tt class="py-op">(</tt><tt class="py-string">'POST'</tt><tt class="py-op">,</tt> <tt class="py-name">base_url</tt><tt class="py-op">,</tt> <tt class="py-name">customer_key</tt><tt class="py-op">,</tt> <tt class="py-name">secret_token</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">    <tt class="py-name">data</tt> <tt class="py-op">=</tt> <tt class="py-string">"{}+{}"</tt><tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">email</tt><tt class="py-op">,</tt> <tt class="py-name">ip</tt><tt class="py-op">)</tt> <tt class="py-keyword">if</tt> <tt class="py-name">ip</tt> <tt class="py-keyword">else</tt> <tt class="py-name">email</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">    <tt class="py-string">"""ivar: payload sent to emailAge. Email and optionally includes IP."""</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line"> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">        <tt id="link-9" class="py-name"><a title="emailage.api.logger" class="py-name" href="#" onclick="return doclink('link-9', 'logger', 'link-4');">logger</a></tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">(</tt><tt class="py-string">"EmailAge Request: {} {}"</tt><tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-name">data</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">        <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-name">requests</tt><tt class="py-op">.</tt><tt class="py-name">post</tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-name">data</tt><tt class="py-op">=</tt><tt class="py-name">data</tt><tt class="py-op">)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line">        <tt class="py-name">resp</tt> <tt class="py-op">=</tt> <tt class="py-name">literal_eval</tt><tt class="py-op">(</tt><tt class="py-name">r</tt><tt class="py-op">.</tt><tt class="py-name">content</tt><tt class="py-op">)</tt> </tt>
+<a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line">        <tt id="link-10" class="py-name"><a title="emailage.api.logger" class="py-name" href="#" onclick="return doclink('link-10', 'logger', 'link-4');">logger</a></tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">(</tt><tt class="py-string">"EmailAge Response: {}"</tt><tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">resp</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno">88</tt>  <tt class="py-line">        <tt class="py-name">results</tt> <tt class="py-op">=</tt> <tt class="py-name">resp</tt><tt class="py-op">[</tt><tt class="py-string">'query'</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'results'</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L89"></a><tt class="py-lineno">89</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt> <tt class="py-keyword">as</tt> <tt class="py-name">e</tt><tt class="py-op">:</tt> </tt>
+<a name="L90"></a><tt class="py-lineno">90</tt>  <tt class="py-line">        <tt class="py-name">msg</tt> <tt class="py-op">=</tt> <tt class="py-string">"Could not get emailAge score. {}: {}."</tt><tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">e</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">,</tt> <tt class="py-name">e</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno">91</tt>  <tt class="py-line">        <tt id="link-11" class="py-name"><a title="emailage.api.logger" class="py-name" href="#" onclick="return doclink('link-11', 'logger', 'link-4');">logger</a></tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">(</tt><tt class="py-string">"EmailAge Response: None due to error."</tt><tt class="py-op">)</tt> </tt>
+<a name="L92"></a><tt class="py-lineno">92</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">msg</tt> </tt>
+<a name="L93"></a><tt class="py-lineno">93</tt>  <tt class="py-line"> </tt>
+<a name="L94"></a><tt class="py-lineno">94</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">score_only</tt><tt class="py-op">:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno">95</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">results</tt><tt class="py-op">[</tt><tt class="py-string">'EAScore'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-string">"{}. {}."</tt><tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">results</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-string">'EAAdvice'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">results</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-string">'EAReason'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L96"></a><tt class="py-lineno">96</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L97"></a><tt class="py-lineno">97</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">results</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt> </tt>
+</div><a name="L98"></a><tt class="py-lineno">98</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="emailage-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Jan 16 05:09:52 2016
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
