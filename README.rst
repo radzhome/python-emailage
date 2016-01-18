@@ -23,7 +23,7 @@ Example Usage
 TODO
 ----
 
-* Need better error handling, i.e. authorization error.
+* re-organize package, i.e. emailage.get_score()
 * sphinx documentation
 
 Legal
