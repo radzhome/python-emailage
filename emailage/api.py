@@ -14,6 +14,7 @@ import requests
 
 from tools import generate_nonce_timestamp
 from tools import split_url_and_query
+from .exceptions import EmailAgeServiceException
 
 logger = logging.getLogger('emailage')
 
@@ -75,23 +76,31 @@ def get_emailage_score(email, customer_key, secret_token, ip=None, use_prod=Fals
     @return: success, emailAge score data, message
     """
 
+    if not customer_key or not secret_token:
+        raise EmailAgeServiceException(error_code=None,
+                                       value="Missing Credentials: Customer key and/or secret token not supplied.")
+
     base_url = get_base_url(use_prod) + "?format=json"
     url = get_emailage_url('POST', base_url, customer_key, secret_token)
     data = "{}+{}".format(email, ip) if ip else email
     """ivar: payload sent to emailAge. Email and optionally includes IP."""
 
+    logger.info("EmailAge Request: {} {}".format(url, data))
+    r = requests.post(url, data=data)
+    resp = literal_eval(r.content)
+    logger.info("EmailAge Response: {}".format(resp))
+    response_status = resp['responseStatus']
+    if response_status.get('status') == 'failed':
+        raise EmailAgeServiceException(error_code=response_status.get('errorCode'),
+                                       value=response_status.get('description'))
     try:
-        logger.info("EmailAge Request: {} {}".format(url, data))
-        r = requests.post(url, data=data)
-        resp = literal_eval(r.content)
-        logger.info("EmailAge Response: {}".format(resp))
         results = resp['query']['results'][0]
-    except Exception as e:
-        msg = "Could not get emailAge score. {}: {}.".format(e.__class__, e)
+    except IndexError:
         logger.info("EmailAge Response: None due to error.")
-        return False, None, msg
+        raise EmailAgeServiceException(error_code=None,
+                                       value="Could not get emailAge score. {}".format(resp))
 
     if score_only:
-        return True, results['EAScore'], "{}. {}.".format(results.get('EAAdvice'), results.get('EAReason'))
+        return results['EAScore'], "{}. {}.".format(results.get('EAAdvice'), results.get('EAReason'))
     else:
-        return True, results, ""
+        return results, ""
