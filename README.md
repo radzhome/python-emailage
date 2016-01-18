@@ -1,10 +1,7 @@
 python-emailage
 ====================
 
-Python integration with emailAge API
-
-
-Dependencies: requests
+Python emailAge integration wrapper using [requests](https://github.com/kennethreitz/requests.
 
 
 Installation
@@ -14,6 +11,19 @@ Via pip:
 
     pip install emailage
 
+Example Usage
+-------------
+
+    import emailage
+    emailage.api.get_emailage_score('wang@emailage.com', ip='142.136.211.118', 
+                                    customer_key='<key>', secret_token='<token>')
+
+
+TODO
+----
+
+* Need better error handling, i.e. authorization error.
+* sphinx documentation
 
 Legal
 -----
