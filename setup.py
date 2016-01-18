@@ -1,7 +1,7 @@
 from setuptools import setup  # , find_packages
 import emailage
 
-LONG_DESCRIPTION = open('README.md').read()
+LONG_DESCRIPTION = open('README.rst').read()
 
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
