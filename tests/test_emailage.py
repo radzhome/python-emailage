@@ -69,16 +69,16 @@ class TestEmailageAPI(unittest.TestCase):
 
     # Test full result and score alone.
     def test_get_score(self):
-        success, score, message = oauth.get_emailage_score(email=self.query_email, ip=self.query_ip,
-                                                           customer_key=self.account_sid,
-                                                           secret_token=self.auth_token, use_prod=USE_PROD,
-                                                           score_only=True)
+        score, message = oauth.get_emailage_score(email=self.query_email, ip=self.query_ip,
+                                                  customer_key=self.account_sid,
+                                                  secret_token=self.auth_token, use_prod=USE_PROD,
+                                                  score_only=True)
         assert score, "No score returned {}.".format(message)
 
-        success, score, message = oauth.get_emailage_score(email=self.query_email, ip=self.query_ip,
-                                                           customer_key=self.account_sid,
-                                                           secret_token=self.auth_token, use_prod=USE_PROD,
-                                                           score_only=False)
+        score, message = oauth.get_emailage_score(email=self.query_email, ip=self.query_ip,
+                                                  customer_key=self.account_sid,
+                                                  secret_token=self.auth_token, use_prod=USE_PROD,
+                                                  score_only=False)
         assert score, "No score returned. {}.".format(message)
 
 
