@@ -14,9 +14,10 @@ Via pip:
 Example Usage
 -------------
 
+.. code:: python
+
     import emailage
-    emailage.api.get_emailage_score('wang@emailage.com', ip='142.136.211.118', 
-                                    customer_key='<key>', secret_token='<token>')
+    emailage.api.get_emailage_score('wang@emailage.com', ip='142.136.211.118', customer_key='<key>', secret_token='<token>')
 
 
 TODO
