@@ -1,7 +1,7 @@
 python-emailage
 ====================
 
-Python emailAge integration wrapper using [requests](https://github.com/kennethreitz/requests.
+Python emailAge integration wrapper using `requests <https://github.com/kennethreitz/requests>`_.
 
 
 Installation
