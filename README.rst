@@ -1,6 +1,9 @@
 python-emailage
 ====================
 
+.. image:: https://travis-ci.org/radzhome/python-emailage.svg?branch=master
+    :target: https://travis-ci.org/radzhome/python-emailage
+
 Python emailAge integration wrapper using `requests <https://github.com/kennethreitz/requests>`_.
 
 
