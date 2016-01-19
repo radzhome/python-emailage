@@ -5,7 +5,7 @@ import uuid
 def generate_nonce_timestamp():
     """Generate pseudo-random number and seconds since epoch (UTC)."""
     nonce = uuid.uuid1()
-    oauth_timestamp, oauth_nonce = str(nonce.time), nonce.get_hex()
+    oauth_timestamp, oauth_nonce = str(nonce.time), nonce.hex
     return oauth_nonce, oauth_timestamp
 
 

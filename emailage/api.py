@@ -1,19 +1,31 @@
+# coding=utf-8
 """emailAge core API module.
 
 This module contains all methods that are required to make a request
 fromt the emailAge API.
 """
+#from __future__ import unicode_literals  # breaks py2
+
 import base64
 import hmac
 import hashlib
-import urllib
 import logging
-from ast import literal_eval
+from ast import literal_eval  # import json
+# Safe way to import url quote for py2 and py3
+# http://docs.pythonsprints.com/python3_porting/py-porting.html
+try:
+    from urllib import quote as urllib_quote
+    from urllib import urlencode as urllib_urlencode
+    py3_hack = False
+except ImportError:
+    from urllib.parse import quote as urllib_quote
+    from urllib.parse import urlencode as urllib_urlencode
+    py3_hack = True
 
 import requests
 
-from tools import generate_nonce_timestamp
-from tools import split_url_and_query
+from .tools import generate_nonce_timestamp
+from .tools import split_url_and_query
 from .exceptions import EmailAgeServiceException
 
 logger = logging.getLogger('emailage')
@@ -34,24 +46,26 @@ def get_emailage_url(method, url, consumer_key, consumer_secret):
     url, orig_query = split_url_and_query(url)
 
     # URL parse the query, with equal and and chars as safe
-    query_params = urllib.quote(orig_query, safe='=&') + '&'
+    query_params = urllib_quote(orig_query, safe='=&') + '&'
 
     # URL encode credential params
-    cred_params = urllib.urlencode({'oauth_consumer_key': consumer_key, 'oauth_nonce': nonce,
+    cred_params = urllib_urlencode({'oauth_consumer_key': consumer_key, 'oauth_nonce': nonce,
                                     'oauth_signature_method': 'HMAC-SHA1', 'oauth_timestamp': timestamp,
                                     'oauth_version': '1.0'})
     """ivar: credential parameters required in the payload."""
 
     query_str = query_params + cred_params
 
-    sig_url = method.upper() + "&" + urllib.quote(url, "") + "&" + urllib.quote(query_str, "")
+    sig_url = method.upper() + "&" + urllib_quote(url, "") + "&" + urllib_quote(query_str, "")
 
     # Generate the has using customer secret key and create the digest
-    hash_result = hmac.new(consumer_secret + "&", sig_url.encode('utf-8'), hashlib.sha1).digest()
+    to_hash = "{}&{}".format(consumer_secret, sig_url.encode('utf-8'))
+
+    hash_result = hmac.new(str.encode(to_hash), digestmod=hashlib.sha1).digest()
     sig = base64.encodestring(hash_result).rstrip()  # Encode string, dropping the leading
     """ivar: signature based on consumer secret to validate request."""
 
-    oauth_url = url + "?" + query_str + "&oauth_signature=" + urllib.quote(sig.decode(), "")
+    oauth_url = url + "?" + query_str + "&oauth_signature=" + urllib_quote(sig.decode(), "")
     return oauth_url
 
 
@@ -87,7 +101,12 @@ def get_emailage_score(email, customer_key, secret_token, ip=None, use_prod=Fals
 
     logger.info("EmailAge Request: {} {}".format(url, data))
     r = requests.post(url, data=data)
-    resp = literal_eval(r.content)
+    # some extra crap required for python 3 byte string
+    if py3_hack:
+        resp = literal_eval(r.content.decode('unicode_escape').replace('ï»¿', ''))  # json.loads now working.
+    else:
+        resp = literal_eval(r.content)  # json.loads now working.
+    # resp = json.loads(str(r.content))  # json.loads now working.
     logger.info("EmailAge Response: {}".format(resp))
     response_status = resp['responseStatus']
     if response_status.get('status') == 'failed':
