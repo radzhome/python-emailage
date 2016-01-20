@@ -4,9 +4,8 @@
 This module contains all methods that are required to make a request
 fromt the emailAge API.
 """
-#from __future__ import unicode_literals  # breaks py2
+from __future__ import unicode_literals
 
-import base64
 import hmac
 import hashlib
 import logging
@@ -16,12 +15,11 @@ from ast import literal_eval  # import json
 try:
     from urllib import quote as urllib_quote
     from urllib import urlencode as urllib_urlencode
-    py3_hack = False
+    from base64 import encodestring as base64_encodebytes
 except ImportError:
     from urllib.parse import quote as urllib_quote
     from urllib.parse import urlencode as urllib_urlencode
-    py3_hack = True
-
+    from base64 import encodebytes as base64_encodebytes
 import requests
 
 from .tools import generate_nonce_timestamp
@@ -59,10 +57,11 @@ def get_emailage_url(method, url, consumer_key, consumer_secret):
     sig_url = method.upper() + "&" + urllib_quote(url, "") + "&" + urllib_quote(query_str, "")
 
     # Generate the has using customer secret key and create the digest
-    to_hash = "{}&{}".format(consumer_secret, sig_url.encode('utf-8'))
-
-    hash_result = hmac.new(str.encode(to_hash), digestmod=hashlib.sha1).digest()
-    sig = base64.encodestring(hash_result).rstrip()  # Encode string, dropping the leading
+    to_hash = "{}&".format(consumer_secret)
+    hash_result = hmac.new(to_hash.encode('utf-8'), sig_url.encode('utf-8'), digestmod=hashlib.sha1).digest()
+    # py2 style
+    # hash_result = hmac.new(str(to_hash), sig_url, digestmod=hashlib.sha1).digest()
+    sig = base64_encodebytes(hash_result).rstrip()  # Encode string, dropping the leading
     """ivar: signature based on consumer secret to validate request."""
 
     oauth_url = url + "?" + query_str + "&oauth_signature=" + urllib_quote(sig.decode(), "")
@@ -88,6 +87,7 @@ def get_emailage_score(email, customer_key, secret_token, ip=None, use_prod=Fals
     @param ip: optional ip address to include in the query.
     @param use_prod: use emailage production url instead of sandbox.
     @return: success, emailAge score data, message
+    :param score_only:
     """
 
     if not customer_key or not secret_token:
@@ -101,12 +101,8 @@ def get_emailage_score(email, customer_key, secret_token, ip=None, use_prod=Fals
 
     logger.info("EmailAge Request: {} {}".format(url, data))
     r = requests.post(url, data=data)
-    # some extra crap required for python 3 byte string
-    if py3_hack:
-        resp = literal_eval(r.content.decode('unicode_escape').replace('ï»¿', ''))  # json.loads now working.
-    else:
-        resp = literal_eval(r.content)  # json.loads now working.
-    # resp = json.loads(str(r.content))  # json.loads now working.
+    resp = literal_eval(r.content.decode('utf-8-sig'))  # json.loads now working.
+    # import json; resp = json.loads(str(r.content.decode('utf-8-sig')))  # json.loads now working.
     logger.info("EmailAge Response: {}".format(resp))
     response_status = resp['responseStatus']
     if response_status.get('status') == 'failed':

@@ -44,7 +44,7 @@ class TestEmailageAPI(unittest.TestCase):
         url = oauth.get_emailage_url("POST", orig_url, self.account_sid, self.auth_token)
         data = self.query
         req = requests.post(url, data=data)
-        resp = literal_eval(req.content)
+        resp = literal_eval(req.content.decode('utf-8-sig'))
         assert resp['query']['results'][0]['EAScore'], "EA Score not found. {}".format(resp)
 
     # POST with xml output
@@ -54,7 +54,7 @@ class TestEmailageAPI(unittest.TestCase):
         data = self.query
         req = requests.post(url, data=data)
         rex = re.compile(r'<EAScore>(.*?)</EAScore>')
-        match = rex.search(req.content)
+        match = rex.search(req.content.decode('utf-8-sig'))
         assert match.groups()[0].strip(), req.content
 
     # GET i.e
@@ -63,7 +63,7 @@ class TestEmailageAPI(unittest.TestCase):
         orig_url = self.base_url + "?format=" + self.result_format + "&query=" + self.query + "&user_email="
         url = oauth.get_emailage_url("GET", orig_url, self.account_sid, self.auth_token)
         req = requests.get(url)
-        resp = literal_eval(req.content)
+        resp = literal_eval(req.content.decode('utf-8-sig'))
         logging.debug(resp)
         assert resp['query']['results'][0]['EAScore'], "EA Score not found."
 
@@ -83,4 +83,5 @@ class TestEmailageAPI(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     unittest.main()
