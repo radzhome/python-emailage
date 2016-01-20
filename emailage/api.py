@@ -87,7 +87,7 @@ def get_emailage_score(email, customer_key, secret_token, ip=None, use_prod=Fals
     @param ip: optional ip address to include in the query.
     @param use_prod: use emailage production url instead of sandbox.
     @return: success, emailAge score data, message
-    :param score_only:
+    :param score_only: only return score instead of entire payload.
     """
 
     if not customer_key or not secret_token:
