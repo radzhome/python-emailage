@@ -22,8 +22,9 @@ Example Usage
     import emailage
     emailage.api.get_emailage_score('wang@emailage.com', ip='142.136.211.118', customer_key='<key>', secret_token='<token>')
 
+See `tests <tests/>`_
 
-TODO
+Todos
 ----
 
 * re-organize package, i.e. emailage.get_score()
