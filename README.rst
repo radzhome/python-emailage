@@ -4,7 +4,7 @@ python-emailage
 .. image:: https://travis-ci.org/radzhome/python-emailage.svg?branch=master
     :target: https://travis-ci.org/radzhome/python-emailage
 
-Python emailAge integration wrapper using `requests <https://github.com/kennethreitz/requests>`_.
+Python emailAge integration wrapper using `requests <https://github.com/kennethreitz/requests>`_. See emailage_ .
 
 
 Installation
@@ -38,3 +38,4 @@ This software is licensed under the BSD License.
 This software is not authored by, endorsed by, or in any way affiliated with
 emailAge Corp.
 
+.. _emailage: emailage/
