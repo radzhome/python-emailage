@@ -1,0 +1,10 @@
+.. _GitHub project: https://github.com/radzhome/emailage
+.. _issue tracker: https://github.com/radzhome/emailage/issues
+.. _requests: https://pypi.python.org/pypi/requests
+
+.. _emailage: https://emailage.com/
+
+.. _Python: http://python.org
+.. _GitHub: https://github.com/
+
+.. _BSD License: http://opensource.org/licenses/bsd-license.php
