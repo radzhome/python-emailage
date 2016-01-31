@@ -1,3 +1,7 @@
+.. _release_notes:
+
+.. include:: global.txt
+
 Release Notes
 =============
 

@@ -10,6 +10,7 @@ import hmac
 import hashlib
 import logging
 from ast import literal_eval  # import json
+
 # Safe way to import url quote for py2 and py3
 # http://docs.pythonsprints.com/python3_porting/py-porting.html
 try:

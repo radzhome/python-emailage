@@ -25,10 +25,9 @@ Example Usage
 See `tests <tests/>`_
 
 Todos
-----
+-----
 
 * re-organize package, i.e. emailage.get_score()
-* sphinx documentation
 
 Legal
 -----
