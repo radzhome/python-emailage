@@ -24,6 +24,11 @@ Example Usage
 
 See `tests <tests/>`_
 
+emailAge official documentation
+-------------------------------
+
+https://app.emailage.com/document/API-Examples-And-Liraries#Python
+
 Todos
 -----
 
