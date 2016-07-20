@@ -28,6 +28,7 @@ Todos
 -----
 
 * re-organize package, i.e. emailage.get_score()
+* add reporting functionality, see https://github.com/emailage/Emailage_Python/tree/master/emailage
 
 Legal
 -----
