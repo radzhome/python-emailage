@@ -30,44 +30,49 @@ from .exceptions import EmailAgeServiceException
 logger = logging.getLogger('emailage')
 
 
-def get_emailage_url(method, url, consumer_key, consumer_secret):
-    """Generate the oauth url for emailAge
-    @param method: can be POST or GET.
-    @param url: base url to use, either prod or sandbox..
-    @param consumer_key: consumer key credential for authentication.
-    @param consumer_secret: consumer secret credential for authentication.
+def get_signature(consumer_secret, sig_url):
+    """Generate the has using customer secret key and create the digest
+    :param sig_url:
+    :param consumer_secret:
     """
+    hmac_key = "{}&".format(consumer_secret)
+    digest = hmac.new(hmac_key.encode('utf-8'), sig_url.encode('utf-8'), digestmod=hashlib.sha1).digest()
+    sig = base64_encodebytes(digest).rstrip()  # Encode string, dropping the leading
+    return sig
 
+
+def get_emailage_url(method, url, consumer_key, consumer_secret, query=None):
+    """Generate the oauth url for emailAge
+    :param query:
+    :param method:
+    :param url:
+    :param consumer_key:
+    :param consumer_secret:
+    :return:
+    """
     if not method:
         method = "GET"
 
     nonce, timestamp = generate_nonce_timestamp()
-    url, orig_query = split_url_and_query(url)
-
-    # URL parse the query, with equal and and chars as safe
-    query_params = urllib_quote(orig_query, safe='=&') + '&'
 
     # URL encode credential params
-    cred_params = urllib_urlencode({'oauth_consumer_key': consumer_key, 'oauth_nonce': nonce,
-                                    'oauth_signature_method': 'HMAC-SHA1', 'oauth_timestamp': timestamp,
-                                    'oauth_version': '1.0'})
+    cred_params = [('format', 'json'), ('oauth_consumer_key', consumer_key), ('oauth_nonce', nonce),
+                   ('oauth_signature_method', 'HMAC-SHA1'), ('oauth_timestamp', timestamp), ('oauth_version', '1.0')]
+    if method == 'GET':
+        cred_params.append(('query', query))
+    cred_params = urllib_urlencode(cred_params)
     """ivar: credential parameters required in the payload."""
 
-    query_str = query_params + cred_params
+    query_str = cred_params
 
     sig_url = method.upper() + "&" + urllib_quote(url, "") + "&" + urllib_quote(query_str, "")
 
-    # Generate the has using customer secret key and create the digest
-    to_hash = "{}&".format(consumer_secret)
-    hash_result = hmac.new(to_hash.encode('utf-8'), sig_url.encode('utf-8'), digestmod=hashlib.sha1).digest()
-    # py2 style
-    # hash_result = hmac.new(str(to_hash), sig_url, digestmod=hashlib.sha1).digest()
-    sig = base64_encodebytes(hash_result).rstrip()  # Encode string, dropping the leading
+    sig = get_signature(consumer_secret, sig_url)
     """ivar: signature based on consumer secret to validate request."""
 
     oauth_url = url + "?" + query_str + "&oauth_signature=" + urllib_quote(sig.decode(), "")
-    return oauth_url
 
+    return oauth_url
 
 def get_base_url(use_prod=False):
     """Returns the base url, either sandbox or prod.
@@ -95,9 +100,10 @@ def get_emailage_score(email, customer_key, secret_token, ip=None, use_prod=Fals
         raise EmailAgeServiceException(error_code=None,
                                        value="Missing Credentials: Customer key and/or secret token not supplied.")
 
-    base_url = get_base_url(use_prod) + "?format=json"
-    url = get_emailage_url('POST', base_url, customer_key, secret_token)
-    data = "{}+{}".format(email, ip) if ip else email
+    base_url = get_base_url(use_prod)
+    query = "{}+{}".format(email, ip) if ip else email
+    url = get_emailage_url('GET', base_url, customer_key, secret_token, query)
+    
     """ivar: payload sent to emailAge. Email and optionally includes IP."""
 
     logger.info("EmailAge Request: {} {}".format(url, data))
