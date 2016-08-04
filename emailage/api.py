@@ -106,7 +106,7 @@ def get_emailage_score(email, customer_key, secret_token, ip=None, use_prod=Fals
     
     """ivar: payload sent to emailAge. Email and optionally includes IP."""
 
-    logger.info("EmailAge Request: {} {}".format(url))
+    logger.info("EmailAge Request: {}".format(url))
     r = requests.get(url)
     resp = literal_eval(r.content.decode('utf-8-sig'))  # json.loads now working.
     # import json; resp = json.loads(str(r.content.decode('utf-8-sig')))  # json.loads now working.
